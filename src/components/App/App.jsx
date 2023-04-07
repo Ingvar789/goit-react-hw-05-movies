@@ -16,48 +16,6 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [pending, setPending] = useState(false);
 
-  const data = [
-    { brand: 'nike', price: 100 },
-    { brand: 'nike', price: 300 },
-    { brand: 'nike', price: 500 },
-    { brand: 'adidas', price: 200 },
-    { brand: 'adidas', price: 50 },
-    { brand: 'puma', price: 150 },
-    { brand: 'puma', price: 500 },
-  ];
-
-  const coutTotalPrice = data => {
-    let totalNikePrice = 0;
-    let totalAdidasPrice = 0;
-    let totalPumaPrice = 0;
-    data.map(({ brand, price }) => {
-      if (brand === 'nike') {
-        totalNikePrice += price;
-      }
-      if (brand === 'adidas') {
-        totalAdidasPrice += price;
-      }
-      if (brand === 'puma') {
-        totalPumaPrice += price;
-      }
-    });
-    // data.forEach(shoes => {
-    //   if (shoes.brand === 'nike') {
-    //     totalNikePrice += shoes.price;
-    //   }
-    //   if (shoes.brand === 'adidas') {
-    //     totalAdidasPrice += shoes.price;
-    //   }
-    //   if (shoes.brand === 'puma') {
-    //     totalPumaPrice += shoes.price;
-    //   }
-    // });
-    return console.log(
-      `Nike:${totalNikePrice}, Adidas:${totalAdidasPrice}, Puma:${totalPumaPrice}`
-    );
-  };
-  coutTotalPrice(data);
-
   const handleFormSubmit = query => {
     setPictures([]);
     setPage(1);
