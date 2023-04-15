@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import css from './Searchbar.module.css';
+import styled from 'styled-components';
 
+const SSearchForm = styled.form`
+  padding: 10px;
+  button {
+    margin-left: 10px;
+    border-radius: 10px;
+  }
+`;
 const Searchbar = props => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(props.query ?? '');
 
   const handleNameChange = event => {
     setSearchQuery(event.currentTarget.value.toLowerCase());
@@ -16,27 +23,25 @@ const Searchbar = props => {
     if (searchQuery.trim() === '') {
       return toast.error('Empty search!');
     }
-
     props.onSubmit(searchQuery);
-    // setSearchQuery('');
+    setSearchQuery('');
   };
 
   return (
-    <header className={css.searchbar}>
-      <form className={css.searchForm} onSubmit={handleSubmit}>
-        <button type="submit" className={css.searchFormButton}>
-          <span className={css.searchFormButtonLabel}>Search</span>
-        </button>
-
+    <header>
+      <SSearchForm onSubmit={handleSubmit}>
         <input
-          className={css.searchFormInput}
           type="text"
           autoComplete="off"
           autoFocus
-          placeholder="Search images and photos"
+          placeholder="Search film"
           onChange={handleNameChange}
+          defaultValue={props.query}
         />
-      </form>
+        <button type="submit">
+          <span>Search</span>
+        </button>
+      </SSearchForm>
     </header>
   );
 };

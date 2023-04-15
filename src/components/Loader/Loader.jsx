@@ -2,7 +2,7 @@ import React from 'react';
 import { ColorRing } from 'react-loader-spinner';
 // import PropTypes from 'prop-types';
 import css from './Loader.module.css';
-const Loader = () => {
+export const Loader = () => {
   return (
     <ColorRing
       visible={true}
@@ -15,4 +15,3 @@ const Loader = () => {
     />
   );
 };
-export default Loader;

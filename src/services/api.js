@@ -1,25 +1,43 @@
 import axios from 'axios';
-
-const BASE_URL = 'https://pixabay.com/api';
-const KEY = '33588957-117fd113af84c86dc96acaa23';
-const IMAGES_PER_PAGE = 12;
+export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
+const BASE_URL = 'https://api.themoviedb.org/3';
+const KEY = '22d68eba575f04ecce30428ee4c456a2';
 
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.params = {
-  key: KEY,
-  image_type: 'photo',
-  orientation: 'horizontal',
-  per_page: IMAGES_PER_PAGE,
+  api_key: KEY,
+  language: 'en-US',
+  include_adult: true,
 };
 
-const getImages = async (searchQuery, page) => {
+export const getTrendings = async () => {
+  const response = await axios.get('/trending/all/day');
+  return response.data.results;
+};
+
+export const getMovieDetails = async id => {
+  const response = await axios.get(`/movie/${id}`);
+  console.log(response);
+  return response.data;
+};
+
+export const getCast = async id => {
+  const response = await axios.get(`/movie/${id}/credits`);
+  return response.data;
+};
+
+export const getReviews = async id => {
+  const response = await axios.get(`/movie/${id}/reviews`);
+  return response.data;
+};
+
+export const getMovie = async searchQuery => {
   const config = {
     params: {
-      q: searchQuery,
-      page: page,
+      query: searchQuery,
+      page: 1,
     },
   };
-  const response = await axios.get('', config);
-  return response.data.hits;
+  const response = await axios.get(`/search/movie`, config);
+  return response.data.results;
 };
-export default getImages;

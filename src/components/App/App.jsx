@@ -1,71 +1,47 @@
 // імпорт компонент
-import React, { useState, useEffect } from 'react';
-import getImages from '../../services/api';
-import { ToastContainer } from 'react-toastify';
+import { lazy, Suspense } from 'react';
+import { NavLink, Route, Routes } from 'react-router-dom';
+import styled from 'styled-components';
 import 'react-toastify/dist/ReactToastify.css';
-import Searchbar from 'components/Searchbar/Searchbar';
-import ImageGallery from 'components/ImageGallery/ImageGallery';
-import Button from 'components/Button/Button';
-import css from './App.module.css';
-import { toast } from 'react-toastify';
-import Loader from 'components/Loader/Loader';
+import Home from 'pages/Home';
+import Cast from 'components/Cast/Cast';
+import Reviews from 'components/Reviews/Reviews';
 
+const Movies = lazy(() => import('pages/Movies'));
+const MovieDetails = lazy(() => import('pages/MovieDetails'));
+
+const StyledLink = styled(NavLink)`
+  text-decoration: none;
+  width: 85px;
+  color: black;
+
+  &.active {
+    color: orange;
+  }
+`;
+const StyledNav = styled.nav`
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 2px solid black;
+`;
 const App = () => {
-  const [pictures, setPictures] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [pending, setPending] = useState(false);
-
-  const handleFormSubmit = query => {
-    setPictures([]);
-    setPage(1);
-    setSearchQuery(query);
-  };
-
-  useEffect(() => {
-    if (searchQuery === '') {
-      return;
-    }
-    const getResponse = async () => {
-      setPending(true);
-      try {
-        const response = await getImages(searchQuery, page);
-
-        if (response.length !== 0) {
-          if (page === 1) {
-            setPictures(response);
-            return;
-          } else {
-            setPictures(prevPictures => [...prevPictures, ...response]);
-          }
-          return;
-        }
-        toast.warning('There are no pictures for your request.');
-        return;
-      } catch (error) {
-        toast.error(error);
-      } finally {
-        setPending(false);
-      }
-    };
-    getResponse();
-  }, [searchQuery, page]);
-
-  const incrementPage = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
   return (
-    <div className={css.app}>
-      <ToastContainer autoClose={3000} />
-      <Searchbar onSubmit={handleFormSubmit} />
-      {pictures.length !== 0 && (
-        <>
-          <ImageGallery pictures={pictures} />
-          {pending ? <Loader /> : <Button onLoadMore={incrementPage} />}
-        </>
-      )}
-    </div>
+    <Suspense>
+      <StyledNav>
+        <StyledLink to={'/'}>Home</StyledLink>
+        <StyledLink to={'/movies'}>Movies</StyledLink>
+      </StyledNav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/movies" element={<Movies />} />
+        <Route path="/movies/:movieId" element={<MovieDetails />}>
+          <Route path="cast" element={<Cast />} />
+          <Route path="reviews" element={<Reviews />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 };
 
